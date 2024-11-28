@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Clima</title>
+    
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-center mb-4">Previsão do tempo</h1>
+
+        <!-- form para consulta do clima -->
+        <form method="POST" class="form-inline justify-content-center mb-4">
+            {% csrf_token %}
+            <input type="text" class="form-control mr-2" id="city" name="city" placeholder="Digite a cidade" required>
+            <button type="submit" class="btn btn-primary">Consultar</button>
+        </form>
+
+
+        <!--exibir resultados do clima -->
+        {% if weather %}
+            <div class="weather-card">
+                <h3>{{ weather.city }}</h3>
+                <p><strong>Temperatura:</strong> {{ weather.temperature }}°C</p>
+                <p><strong>Descrição:</strong> {{ weather.description }}</p>
+                <p><strong>Umidade:</strong> {{ weather.humidity }}%</p>
+            </div>
+        {% endif %}
+
+        <!-- msg de erro -->
+        {% if error %}
+            <div class="alert alert-danger mt-4">
+                <strong>Erro:</strong> {{ error }}
+            </div>
+        {% endif %}
+
+        <!-- exibir previsão do tempo-->
+        {% if forecast %}
+            <h3 class="mt-4">Previsão para os próximos dias:</h3>
+            <ul class="forecast-list">
+                {% for day in forecast %}
+                    <li class="forecast-item">
+                        <strong>{{ day.date }}</strong><br>
+                        Temperatura: {{ day.temperature }}°C<br>
+                        {{ day.description }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+</body>
+</html>
